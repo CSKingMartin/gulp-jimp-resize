@@ -12,5 +12,8 @@
     "glob": "^7.0.5",
     "gulp-jimp": "^1.2.3",
     "jimp": "^0.2.24"
+  },
+  "devDependencies": {
+    "gulp-debug": "^2.1.2"
   }
 }

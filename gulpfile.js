@@ -1,24 +1,15 @@
-var jimp = require("gulp-jimp");
+var jimp = require("gulp-jimp-resize");
 var glob = require("glob");
 var gulp = require('gulp');
+var debug = require('gulp-debug');
+
 
 
 gulp.task('images', function() {
-	gulp.src('testImages/**/*.*')
-	.pipe(jimp({
-		
-		'-sm': {
-			resize: {height: 200}
-		},
-		'-md': {
-			resize: {height: 400}
-		},
-		'-lg': {
-			resize: {height: }
-		}
-	}))
-	.pipe(resize({
-		
-	}))
-	.pipe(gulp.dest('./newImages/'));
+	gulp.src('./test/**.*')
+	.pipe(debug())
+	.pipe(jimp(['lg', 'md']))
+	.pipe(gulp.dest('resized'));
 });
+		
+		

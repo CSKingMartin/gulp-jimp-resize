@@ -1,13 +1,9 @@
 var Jimp = require("jimp");
-var glob = require("glob");
+var through = require('through2');
+var gutil = require('gulp-util');
+var PluginError = gutil.PluginError;
 
-var images = glob.sync('./test/**/*.*');
-
-var size = Object.keys(images).length;
-
-console.log('preparing to process ' + size + ' images\n');
-
-var array = ['squareH', 'sm', 'lg', 'md', 'squareV-sm'];
+const PLUGIN_NAME = "gulp-jimp-resize";
 
 var defaults =
 	{
@@ -67,21 +63,6 @@ var defaults =
 			}
 	}
 
-
-for (var key in images){
-	var path = images[key];
-	var filename = path.substring(path.lastIndexOf('/')+1, path.lastIndexOf('.'));
-	//console.log(filename + ",");
-
-	for(i = 0; i < array.length; i++){
-		var param = array[i];
-
-		var data = defaults[param];
-
-		goGoGadgetRewrite(path, filename, data);
-	}
-}
-
 function goGoGadgetImageResize(path, filename, data) {
 	var width = data.width;
 	var suffix = data.suffix;
@@ -115,6 +96,40 @@ function goGoGadgetImageResize(path, filename, data) {
 	});
 };
 
+function gulp-jimp-resize(data, options) {
 
+	if (!options) {
+		throw new PluginError(PLUGIN_NAME, 'Missing options entry!');
+	}
+
+	return through.obj(function(file, enc, cb) {
+		if(file.isNull()){
+			return cb(null, file);
+		}
+
+		if(file.isStream()) {
+			images = file.contents.pipe();
+			for (var key in images){
+				var path = images[key];
+				var filename = path.substring(path.lastIndexOf('/')+1, path.lastIndexOf('.'));
+
+				for(i = 0; i < array.length; i++){
+					var param = array[i];
+
+					var data = defaults[param];
+
+					goGoGadgetImageResize(path, filename, data);
+				}
+			}
+		}
+
+		cb(null, false);
+	});
+
+}
+
+
+
+module.exports = gulp-jimp-resize;
 
 
