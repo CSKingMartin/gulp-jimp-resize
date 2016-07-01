@@ -1,0 +1,16 @@
+{
+  "name": "gulp-plugin",
+  "version": "1.0.0",
+  "description": "Maniuplate images' size with few dependencies. Uses JIMP wrapped with gulp.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Conner Wells",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^7.0.5",
+    "gulp-jimp": "^1.2.3",
+    "jimp": "^0.2.24"
+  }
+}
