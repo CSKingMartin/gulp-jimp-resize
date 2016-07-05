@@ -1,6 +1,8 @@
 var Jimp = require("jimp");
 var through = require('through2');
 var gutil = require('gulp-util');
+var File = require('vinyl');
+var fs = require('fs');
 var PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = "gulp-jimp-resize";
@@ -63,73 +65,114 @@ var defaults =
 			}
 	}
 
-function goGoGadgetImageResize(path, filename, data) {
+var newImages = [];
+
+function goGoGadgetImageResize(path, filename, data, cb) {
+
 	var width = data.width;
 	var suffix = data.suffix;
 	var crop = data.crop;
 	var horizontal = data.horizontal;
+	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + ".png";
 
 	Jimp.read(path, function (err, image) {
+
 		if (err) throw err;
-	
+
 		image.resize(width, Jimp.AUTO)
-        .quality(60)
+        .quality(100);
 
         if(crop == true) {
         	var center = (image.bitmap.width - width)/2;
  
         	if(horizontal == true) {
-        		image.crop(center, 0, width, width)
+        		image.crop(center, 0, width, width);
         	}
         	else {
-        		image.crop(0, center, width, width)
+        		image.crop(0, center, width, width);
         	}
-
         }
 
-        image.write(filename + suffix + ".png", function(err) {
+        image.write('resized/' + name, function(err) {
          	if (err) {
          		console.log('write error:', err);
          	}
         }); 
 
+       	image.getBuffer(Jimp.MIME_JPEG, function(err, buffer){
+       		var alteredImage = new gutil.File({
+       			path: name,
+       			contents:buffer
+       		});
+
+       		newImages.push(alteredImage);
+
+       		console.log("newImages has " + newImages.length + " images");
+
+        });
+
+        cb();
 	});
 };
 
-function gulp-jimp-resize(data, options) {
+function gulpJimpResize(options) {
+
 
 	if (!options) {
 		throw new PluginError(PLUGIN_NAME, 'Missing options entry!');
 	}
 
-	return through.obj(function(file, enc, cb) {
+	
+	return through.obj(function(file, enc, next) { //stream where files will pass
+
+		//newImages.push(file);
+
 		if(file.isNull()){
+			throw new PluginError(PLUGIN_NAME, 'No files detected!');
 			return cb(null, file);
 		}
 
-		if(file.isStream()) {
-			images = file.contents.pipe();
-			for (var key in images){
-				var path = images[key];
-				var filename = path.substring(path.lastIndexOf('/')+1, path.lastIndexOf('.'));
+		//console.log(file.contents);
 
-				for(i = 0; i < array.length; i++){
-					var param = array[i];
+		for(i = 0; i < options.length; i++){
+			var param = options[i];
+			var data = defaults[param];
+			var path = file.path.toString();
+			var name = file.relative.toString();
 
-					var data = defaults[param];
-
-					goGoGadgetImageResize(path, filename, data);
-				}
+			
+			function readOut() {
+				console.log("test");
+				console.log("finalImages: " + newImages);
+				//this.push(file);
 			}
+
+			//console.log(goGoGadgetImageResize(path, name, data));
+
+			goGoGadgetImageResize(path, name, data, readOut);
 		}
 
-		cb(null, false);
-	});
+		
+		this.push(file);
 
+		next();//allows us to apply our operation to multiple files. w/out cb, only deals with first globbed file
+
+		
+	}, function(flush) {
+		console.log("i tried");
+		for(i = 0; i < newImages.length; i++){
+			this.push(newImages[i]);
+			flush();
+		}
+	} //flush function
+
+	);
+
+	
 }
 
 
 
-module.exports = gulp-jimp-resize;
+module.exports = gulpJimpResize;
 
 
