@@ -6,9 +6,8 @@ var debug = require('gulp-debug');
 
 
 gulp.task('images', function() {
-	gulp.src('./test/*.jpg')
-	.pipe(debug())
-	.pipe(jimp(['lg', 'md', 'squareV-sm', 'sm']))
+	gulp.src('./originals/**/*.*')
+	.pipe(jimp(['sm', 'md', 'squareV-sm', 'squareH-sm']))
 	.pipe(gulp.dest('./resized/'));
 });
 		
