@@ -2,7 +2,6 @@ var Jimp = require("jimp");
 var through = require('through2');
 var gutil = require('gulp-util');
 var File = require('vinyl');
-var fs = require('fs');
 var PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = "gulp-jimp-resize";
@@ -12,166 +11,120 @@ var defaults =
 		"xl": {
 			"width": 1500,
 			"suffix": "-xl",
-			"crop": false,
-			"horizontal": false
+			"crop": false
 			},
 		"lg": {
 			"width": 1220,
 			"suffix": "-lg",
-			"crop": false,
-			"horizontal": false
+			"crop": false
 			},
 		"md": {
 			"width": 960,
 			"suffix": "-md",
-			"crop": false,
-			"horizontal": false
+			"crop": false
 			},
 		"sm": {
 			"width": 480,
 			"suffix": "-sm",
-			"crop": false,
-			"horizontal": false
+			"crop": false
 			},
 		"xs": {
 			"width": 320,
 			"suffix": "-xs",
-			"crop": false,
-			"horizontal": false
+			"crop": false
 			},
-		"squareV": {
+		"square": {
 			"width": 500,
 			"suffix": "-square",
-			"crop": true,
-			"horizontal": false
+			"crop": true
 			},
-		"squareV-sm": {
+		"square-sm": {
 			"width": 320,
 			"suffix": "-square-sm",
-			"crop": true,
-			"horizontal": false
+			"crop": true
 			},
-		"squareH": {
-			"width": 500,
-			"suffix": "-square2",
-			"crop": true,
-			"horizontal": true
-			},
-		"squareH-sm": {
-			"width": 320,
-			"suffix": "-square2-sm",
-			"crop": true,
-			"horizontal": true
-			}
 	}
 
 var newImages = [];
 
-function goGoGadgetImageResize(path, filename, data, cb) {
+function process (file, option) {
+	
+	var side = option.width;
+	var suffix = option.suffix;
+	var crop = option.crop;
+	var horizontal = option.horizontal;
+	var path = file.path;
 
-	var width = data.width;
-	var suffix = data.suffix;
-	var crop = data.crop;
-	var horizontal = data.horizontal;
 	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + ".png";
 
-	Jimp.read(path, function (err, image) {
+	return new Promise(function(resolve, reject) {
+		Jimp.read(file.contents, function (err, image) {
+			if (err) {
+				reject(err);
+				return;
+			}
 
-		if (err) throw err;
+	        var center = 0;
 
-		image.resize(width, Jimp.AUTO)
-        .quality(100);
-
-        if(crop == true) {
-        	var center = (image.bitmap.width - width)/2;
- 
-        	if(horizontal == true) {
-        		image.crop(center, 0, width, width);
+	        //RESIZE
+        	if(image.bitmap.width > image.bitmap.height) { //horizontal image
+        		if(option == 'square' || 'square-sm'){
+        			//square crop we crop to different dimensions
+        			image.resize(Jimp.AUTO, side);
+        		} else {
+        			image.resize(side, Jimp.AUTO)
+        		}
+        		image.quality(100);
+        		var center = (image.bitmap.width - side) / 2;
+        	} 
+        	else { 		// vertical image
+        	 	if(option == 'square' || 'square-sm'){
+        			image.resize(side, Jimp.AUTO);
+        		} else {
+        			image.resize(Jimp.AUTO, side)
+        		}
+		        image.quality(100);
         	}
-        	else {
-        		image.crop(0, center, width, width);
+
+       		//CROP
+    		if(crop == true) {
+        		
+        		image.crop(center, 0, side, side);
         	}
-        }
+    	
+	       	var newImg = image.getBuffer(Jimp.MIME_JPEG, function(err, buffer){
+				if (err) {
+					reject(err);
+					return;
+				}
 
-        image.write('resized/' + name, function(err) {
-         	if (err) {
-         		console.log('write error:', err);
-         	}
-        }); 
-
-       	image.getBuffer(Jimp.MIME_JPEG, function(err, buffer){
-       		var alteredImage = new gutil.File({
-       			path: name,
-       			contents:buffer
-       		});
-
-       		newImages.push(alteredImage);
-
-       		console.log("newImages has " + newImages.length + " images");
-
-        });
-
-        cb();
-	});
+	       		resolve(new gutil.File({
+	       			path: name,
+	       			contents:buffer
+	       		}));
+	        });
+		});
+	})
 };
 
 function gulpJimpResize(options) {
-
-
 	if (!options) {
 		throw new PluginError(PLUGIN_NAME, 'Missing options entry!');
 	}
 
-	
-	return through.obj(function(file, enc, next) { //stream where files will pass
-
-		//newImages.push(file);
-
+	return through.obj(function(file, enc, cb) { //transform function
 		if(file.isNull()){
-			throw new PluginError(PLUGIN_NAME, 'No files detected!');
+			throw new PluginError(PLUGIN_NAME, 'No files passed!');
 			return cb(null, file);
 		}
 
-		//console.log(file.contents);
-
-		for(i = 0; i < options.length; i++){
-			var param = options[i];
-			var data = defaults[param];
-			var path = file.path.toString();
-			var name = file.relative.toString();
-
-			
-			function readOut() {
-				console.log("test");
-				console.log("finalImages: " + newImages);
-				//this.push(file);
-			}
-
-			//console.log(goGoGadgetImageResize(path, name, data));
-
-			goGoGadgetImageResize(path, name, data, readOut);
-		}
-
-		
-		this.push(file);
-
-		next();//allows us to apply our operation to multiple files. w/out cb, only deals with first globbed file
-
-		
-	}, function(flush) {
-		console.log("i tried");
-		for(i = 0; i < newImages.length; i++){
-			this.push(newImages[i]);
-			flush();
-		}
-	} //flush function
-
-	);
-
-	
+		Promise.all(options.map(optName => process(file, defaults[optName])))
+			.then(imageArray => {
+				imageArray.forEach(image => this.push(image))
+				cb();
+			});
+	});
 }
-
-
 
 module.exports = gulpJimpResize;
 
