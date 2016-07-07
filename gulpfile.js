@@ -4,7 +4,7 @@ var gulp = require('gulp');
 
 gulp.task('images', function() {
 	gulp.src('./originals/**/*.*')
-	.pipe(jimp(['sm', 'md', 'squareV-sm', 'squareH-sm']))
+	.pipe(jimp(['square', 'square-sm']))
 	.pipe(gulp.dest('./resized/'));
 });
 		
