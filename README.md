@@ -30,57 +30,31 @@ var defaults =
 		"xl": {
 			"width": 1500,
 			"suffix": "-xl",
-			"crop": false,
-			"horizontal": false
-			},
+			"crop": false
 		"lg": {
 			"width": 1220,
 			"suffix": "-lg",
-			"crop": false,
-			"horizontal": false
-			},
+			"crop": false
 		"md": {
 			"width": 960,
 			"suffix": "-md",
-			"crop": false,
-			"horizontal": false
-			},
+			"crop": false
 		"sm": {
 			"width": 480,
 			"suffix": "-sm",
-			"crop": false,
-			"horizontal": false
-			},
+			"crop": false
 		"xs": {
 			"width": 320,
 			"suffix": "-xs",
-			"crop": false,
-			"horizontal": false
-			},
-		"squareV": {
+			"crop": false
+		"square": {
 			"width": 500,
 			"suffix": "-square",
-			"crop": true,
-			"horizontal": false
-			},
-		"squareV-sm": {
+			"crop": true
+		"square-sm": {
 			"width": 320,
 			"suffix": "-square-sm",
-			"crop": true,
-			"horizontal": false
-			},
-		"squareH": {
-			"width": 500,
-			"suffix": "-square2",
-			"crop": true,
-			"horizontal": true
-			},
-		"squareH-sm": {
-			"width": 320,
-			"suffix": "-square2-sm",
-			"crop": true,
-			"horizontal": true
-			}
+			"crop": true
 	}
 ```
 
