@@ -1,7 +1,6 @@
 var jimp = require("../");
 var gulp = require('gulp');
 
-
 gulp.task('images', function() {
 	gulp.src('./originals/**/*.*')
 	.pipe(jimp([
