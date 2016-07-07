@@ -57,14 +57,19 @@ function process (file, opt) {
 		var option = defaults[opt];
 	}
 
-	console.log(option);
+	if(!option) {
+		throw new PluginError(PLUGIN_NAME, "Default option doesn't exist");
+	}
 
-	
 	var dim = option.dimension;
 	var suffix = option.suffix;
 	var crop = option.square;
 	var horizontal = option.horizontal;
 	var path = file.path;
+
+	if(!(dim || suffix || crop || horizontal)){
+		throw new PluginError(PLUGIN_NAME, "Custom option mssing metadata");
+	}
 
 	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + ".png";
 
@@ -74,8 +79,6 @@ function process (file, opt) {
 				reject(err);
 				return;
 			}
-
-			console.log("got here?");
 
 	        var center = 0;
 
