@@ -9,49 +9,60 @@ const PLUGIN_NAME = "gulp-jimp-resize";
 var defaults =
 	{
 		"xl": {
-			"width": 1500,
+			"dimension": 1500,
 			"suffix": "-xl",
-			"crop": false
+			"square": false
 			},
 		"lg": {
-			"width": 1220,
+			"dimension": 1220,
 			"suffix": "-lg",
-			"crop": false
+			"square": false
 			},
 		"md": {
-			"width": 960,
+			"dimension": 960,
 			"suffix": "-md",
-			"crop": false
+			"square": false
 			},
 		"sm": {
-			"width": 480,
+			"dimension": 480,
 			"suffix": "-sm",
-			"crop": false
+			"square": false
 			},
 		"xs": {
-			"width": 320,
+			"dimension": 320,
 			"suffix": "-xs",
-			"crop": false
+			"square": false
 			},
 		"square": {
-			"width": 500,
+			"dimension": 500,
 			"suffix": "-square",
-			"crop": true
+			"square": true
 			},
 		"square-sm": {
-			"width": 320,
+			"dimension": 320,
 			"suffix": "-square-sm",
-			"crop": true
+			"square": true
 			},
 	}
 
 var newImages = [];
 
-function process (file, option) {
+function process (file, opt) {
+
+	//console.log(option)
+
+	if(typeof opt == 'object'){
+		var option = opt;
+	} else {
+		var option = defaults[opt];
+	}
+
+	console.log(option);
+
 	
-	var side = option.width;
+	var dim = option.dimension;
 	var suffix = option.suffix;
-	var crop = option.crop;
+	var crop = option.square;
 	var horizontal = option.horizontal;
 	var path = file.path;
 
@@ -64,24 +75,26 @@ function process (file, option) {
 				return;
 			}
 
+			console.log("got here?");
+
 	        var center = 0;
 
 	        //RESIZE
         	if(image.bitmap.width > image.bitmap.height) { //horizontal image
         		if(option == 'square' || 'square-sm'){
         			//square crop we crop to different dimensions
-        			image.resize(Jimp.AUTO, side);
+        			image.resize(Jimp.AUTO, dim);
         		} else {
-        			image.resize(side, Jimp.AUTO)
+        			image.resize(dim, Jimp.AUTO)
         		}
         		image.quality(100);
-        		var center = (image.bitmap.width - side) / 2;
+        		var center = (image.bitmap.width - dim) / 2;
         	} 
         	else { 		// vertical image
         	 	if(option == 'square' || 'square-sm'){
-        			image.resize(side, Jimp.AUTO);
+        			image.resize(dim, Jimp.AUTO);
         		} else {
-        			image.resize(Jimp.AUTO, side)
+        			image.resize(Jimp.AUTO, dim)
         		}
 		        image.quality(100);
         	}
@@ -89,7 +102,7 @@ function process (file, option) {
        		//CROP
     		if(crop == true) {
         		
-        		image.crop(center, 0, side, side);
+        		image.crop(center, 0, dim, dim);
         	}
     	
 	       	var newImg = image.getBuffer(Jimp.MIME_JPEG, function(err, buffer){
@@ -118,7 +131,7 @@ function gulpJimpResize(options) {
 			return cb(null, file);
 		}
 
-		Promise.all(options.map(optName => process(file, defaults[optName])))
+		Promise.all(options.map(opt => process(file, opt)))
 			.then(imageArray => {
 				imageArray.forEach(image => this.push(image))
 				cb();
