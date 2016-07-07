@@ -4,7 +4,7 @@
   "description": "Maniuplate images' size with few dependencies. Uses JIMP wrapped with gulp.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./test/gulpfile.js"
   },
   "author": "Conner Wells",
   "license": "MIT",
