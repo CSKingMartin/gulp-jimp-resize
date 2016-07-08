@@ -47,7 +47,7 @@ var defaults =
 
 var newImages = [];
 
-function process (file, opt) {
+function goGoGadgetImageResize (file, opt) {
 
 	//console.log(option)
 
@@ -66,6 +66,7 @@ function process (file, opt) {
 	var crop = option.square;
 	var horizontal = option.horizontal;
 	var path = file.path;
+
 
 	if(!(dim || suffix || crop || horizontal)){
 		throw new PluginError(PLUGIN_NAME, "Custom option mssing metadata");
@@ -128,15 +129,18 @@ function gulpJimpResize(options) {
 		throw new PluginError(PLUGIN_NAME, 'Missing options entry!');
 	}
 
+	//console.log(this);
+
 	return through.obj(function(file, enc, cb) { //transform function
 		if(file.isNull()){
 			throw new PluginError(PLUGIN_NAME, 'No files passed!');
 			return cb(null, file);
 		}
 
-		Promise.all(options.map(opt => process(file, opt)))
+		Promise.all(options.map(opt => goGoGadgetImageResize(file, opt)))
 			.then(imageArray => {
 				imageArray.forEach(image => this.push(image))
+
 				cb();
 			});
 	});

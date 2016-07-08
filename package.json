@@ -10,5 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "jimp": "^0.2.24"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp-count": "^0.2.0",
+    "mocha": "^2.5.3"
   }
 }
