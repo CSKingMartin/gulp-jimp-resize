@@ -5,7 +5,7 @@ Inspired by the same functionality as gulp-jimp, which has open issues crucial t
 
 # install:
 ```
-npm install gulp-jimp-resize
+npm install --save-dev gulp-jimp-resize
 ```
 
 # how to:
