@@ -1,5 +1,5 @@
 {
-  "name": "gulp-plugin",
+  "name": "gulp-jimp-resize",
   "version": "1.0.0",
   "description": "Maniuplate images' size with few dependencies. Uses JIMP wrapped with gulp.",
   "main": "index.js",
