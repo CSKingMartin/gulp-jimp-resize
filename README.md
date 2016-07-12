@@ -9,7 +9,7 @@ npm install --save-dev gulp-jimp-resize
 ```
 
 # how to:
-Usage is pretty simple. Pipe in a directory of images to the "gulp-jimp-resize" module, and then pipe it somewhere else as you wish (for minification, or to a new directory, etc).
+Usage is pretty simple. Pipe in a directory of images to the "gulp-jimp-resize" module, and then pipe it somewhere else as you wish (for minification, or to a new directory, etc). Each image will be resized to EACH option piped into the plugin. The example gulpfile below will produce 5 new images for every image (custom, md, sm, square, and custom2).
 
 # example gulp file:
 ```
@@ -30,7 +30,7 @@ return gulp.src('./originals/**/*.*')
 ```
 
 #options:
-gulp-jimp-resize supports custom options, and has structure for creation of defaults for quick access. The current defaults are located in the 'index.js' file of the module. These can be edited if desired. 
+gulp-jimp-resize supports custom options, and has structure for creation of defaults for quick access. The current defaults are located in the 'index.js' file of the module. These can be edited if desired. Each option passed has 3 parameters: the suffix -- which will be included in the name of resized image; the dimension -- which will become the size of the LARGEST side of the new resized image (this is to keep the aspect ratio intact); and the square property -- which will crop your image to a square whose dimensions are both equal to the "dimension" property.
 
 The current defaults (located in the index.js folder) are placed below:
 ```
