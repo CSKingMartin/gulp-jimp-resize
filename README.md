@@ -11,12 +11,17 @@ Usage is pretty simple. Pipe in a directory of images to the "gulp-jimp-resize" 
 var jimp = require("gulp-jimp-resize");
 var gulp = require('gulp');
 
-
 gulp.task('images', function() {
-	gulp.src('./originals/**/*.*')
-	.pipe(jimp(['sm', 'md', 'squareV-sm', 'squareH-sm']))
+return gulp.src('./originals/**/*.*')
+	.pipe(jimp([
+		{"suffix": "-custom", "dimension": 1000, "square": true}, //custom entry
+	
+		'md', 'sm', 'square', //examples of defaults
+	
+		{"suffix": "-custom2", "dimension": 500, "square": false}]))
 	.pipe(gulp.dest('./resized/'));
 });
+		
 ```
 
 #options:
