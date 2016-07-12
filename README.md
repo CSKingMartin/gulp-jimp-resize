@@ -25,9 +25,9 @@ return gulp.src('./originals/**/*.*')
 ```
 
 #options:
-gulp-jimp-resize currently only supports options described inside of the index.js folder. If you install gulp-jimp-resize and disagree with the defaults, you can change them yourself. Future patches will add the ability to pass your own parameters for custom sizes from the gulpfile. 
+gulp-jimp-resize supports custom options, and has structure for creation of defaults for quick access. The current defaults are located in the 'index.js' file of the module. These can be edited if desired. 
 
-The current options (located in the index.js folder) are placed below:
+The current defaults (located in the index.js folder) are placed below:
 ```
 var defaults =
 	{
