@@ -1,7 +1,7 @@
 # gulp-jimp-resize [![Build Status](https://travis-ci.org/CSKingMartin/gulp-jimp-resize.svg?branch=master)](https://travis-ci.org/CSKingMartin/gulp-jimp-resize)
 Maniuplate images' size with few dependencies. Uses JIMP wrapped with gulp.
 
-Inspired by the same functionality as gulp-jimp, which has open issues crucial to it's functionality. JIMP is a great, simple image processing library with 0 dependencies. This gulp plugin wraps JIMP functionality for gulp in an extremely simple way purely for resizing images ONLY. Resizes based on: width or height (or both), and can crop to a square image.
+Inspired by the same functionality as gulp-jimp, which has open issues crucial to it's functionality. JIMP is a great, simple image processing library with 0 dependencies. This gulp plugin wraps JIMP functionality for gulp in an extremely simple way purely for resizing images ONLY. Resizes based on one dimension passed while keeping the aspect ratio of the original image, or can crop to a square image.
 
 # install:
 ```
