@@ -4,7 +4,7 @@
   "description": "Maniuplate images' size with few dependencies. Uses JIMP wrapped with gulp.",
   "main": "index.js",
   "scripts": {
-    "test": "./test/test.js"
+    "test": "node_modules/.bin/mocha"
   },
   "author": "Conner Wells",
   "license": "MIT",
