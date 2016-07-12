@@ -1,8 +1,13 @@
 {
   "name": "gulp-jimp-resize",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Maniuplate images' size with few dependencies. Uses JIMP wrapped with gulp.",
-  "keywords": ["images", "resize", "gulp", "jimp"],
+  "keywords": [
+    "images",
+    "resize",
+    "gulp",
+    "jimp"
+  ],
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -25,6 +30,5 @@
     "gulp-util": "^3.0.7",
     "mocha": "^2.5.3",
     "through2": "^2.0.1"
-  },
-  "license": "MIT"
+  }
 }
