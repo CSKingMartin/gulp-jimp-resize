@@ -42,16 +42,17 @@ describe('Testing gulp-jimp-resize', function(){
 		it('test one (default)', function(done) {
 			var test = plugin(['sm']);
 
-			var path = '';
+			var name = '';
 
 			test.on('data', function(newImage){
 			//make assertions
-				path = newImage.path;
+				var path = newImage.path;
+				name = path.substring(path.lastIndexOf('/')+1);
 			});
 
 			test.on('end', function(){
 				//once the stream has ended
-				expect(path).to.equal("test/originals/IMG_1743-sm.png");
+				expect(name).to.equal("IMG_1743-sm.png");
 				done();
 			});
 
@@ -64,16 +65,17 @@ describe('Testing gulp-jimp-resize', function(){
 		it('test two (custom)', function(done) {
 			var test = plugin([{"suffix": "-custom", "dimension": 1000, "square": true}]);
 
-			var path = '';
+			var name = '';
 
 			test.on('data', function(newImage){
 			//make assertions
-				path = newImage.path;
+				var path = newImage.path;
+				name = path.substring(path.lastIndexOf('/')+1);
 			});
 
 			test.on('end', function(){
 				//once the stream has ended
-				expect(path).to.equal("test/originals/IMG_1743-custom.png");
+				expect(name).to.equal("IMG_1743-custom.png");
 				done();
 			});
 
