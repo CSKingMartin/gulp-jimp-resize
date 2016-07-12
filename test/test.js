@@ -3,7 +3,6 @@ var gulp = require('gulp');
 var File = require('vinyl');
 var fs = require('fs');
 var gutil = require('gulp-util');
-var probe = require('probe-image-size');
 
 var should = require('chai').should();
 
