@@ -64,12 +64,13 @@ function goGoGadgetImageResize (file, opt) {
 	var dim = option.dimension;
 	var suffix = option.suffix;
 	var crop = option.square;
-	var horizontal = option.horizontal;
 	var path = file.path;
 
+	//console.log(dim, suffix, crop);
 
-	if(!(dim || suffix || crop || horizontal)){
-		throw new PluginError(PLUGIN_NAME, "Custom option mssing metadata");
+
+	if(!dim || !suffix || crop == null){
+		throw new PluginError(PLUGIN_NAME, "Custom option missing metadata");
 	}
 
 	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + ".png";
@@ -132,7 +133,7 @@ function gulpJimpResize(options) {
 	//console.log(this);
 
 	return through.obj(function(file, enc, cb) { //transform function
-		if(file.isNull()){
+		if(!file){
 			throw new PluginError(PLUGIN_NAME, 'No files passed!');
 			return cb(null, file);
 		}

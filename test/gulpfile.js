@@ -1,6 +1,6 @@
 var jimp = require("../");
 var gulp = require('gulp');
-var count = require('gulp-count');
+
 
 gulp.task('images', function() {
 	return gulp.src('./originals/**/*.*')
