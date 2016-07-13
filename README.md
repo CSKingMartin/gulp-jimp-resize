@@ -25,6 +25,22 @@ return gulp.src('./originals/**/*.*')
 	
 		{"suffix": "-custom2", "dimension": 500, "square": false}]))
 	.pipe(gulp.dest('./resized/'));
+
+	.pipe(jimp({
+		prefixAll: '',
+		sizes: [
+			{ suffix: '', width: 100, square: false },
+			{ suffix: '', height: 100, square: false }
+		]
+	}))
+
+	.pipe(jimp({
+		sizes: [
+		    {  },
+			jimp.default.xl,
+			jimp.default.md,
+		]
+	}))
 });
 		
 ```
@@ -34,7 +50,9 @@ gulp-jimp-resize supports custom options, and has structure for creation of defa
 
 The current defaults (located in the index.js folder) are placed below:
 ```js
-var defaults =
+
+var jimp = require('gulp-jimp-resize');
+jimp.default =
 	{
 		"xl": {
 			"width": 1500,
