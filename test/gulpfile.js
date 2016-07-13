@@ -4,12 +4,12 @@ var gulp = require('gulp');
 
 gulp.task('images', function() {
 	return gulp.src('./originals/**/*.*')
-	.pipe(jimp([
-		{"suffix": "-custom", "dimension": 1000, "square": true}, //custom entry
-
-		'md', 'sm', 'square', //examples of defaults
-
-		{"suffix": "-custom2", "dimension": 500, "square": false}]))
+	.pipe(jimp({
+		sizes: [
+			{"suffix": "md", "width": 960},
+			{"suffix": "sm", "width": 480}
+		]
+	}))
 	.pipe(gulp.dest('./resized/'));
 });
 		
