@@ -20,27 +20,34 @@ describe('Testing gulp-jimp-resize', function(){
 	var endImages = [];
 
 	it('should return a stream', function(done) {
-		var myTest = plugin(['sm']);
+		var test = plugin({sizes: [
+			{"suffix": "so", "width": 960},
+			{"suffix": "rad", "height": 500}
+		]});
 
-		myTest.on('data', function(newImage){
+		test.on('data', function(newImage){
 			//make assertions
+			console.log(newImage.naturalWidth);
 		});
 
-		myTest.on('end', function(){
+		test.on('end', function(){
 			//once the stream has ended
 			done();
 		});
 
-		var endStream = myTest.write(testImage);
+		var endStream = test.write(testImage);
 	
 		expect(endStream).to.be.true;
 	
-		myTest.end();
+		test.end();
 	});
 
 	describe('should save with correct name', function() {
-		it('test one (default)', function(done) {
-			var test = plugin(['sm']);
+		it('test one', function(done) {
+			var test = plugin({sizes: [
+			{"suffix": "youre", "width": 960}
+		]});
+
 
 			var name = '';
 
@@ -52,7 +59,7 @@ describe('Testing gulp-jimp-resize', function(){
 
 			test.on('end', function(){
 				//once the stream has ended
-				expect(name).to.equal("IMG_1743-sm.png");
+				expect(name).to.equal("IMG_1743-youre.jpg");
 				done();
 			});
 
@@ -62,8 +69,10 @@ describe('Testing gulp-jimp-resize', function(){
 
 		});
 
-		it('test two (custom)', function(done) {
-			var test = plugin([{"suffix": "-custom", "dimension": 1000, "square": true}]);
+		it('test two', function(done) {
+			var test = plugin({sizes: [
+			{"suffix": "cool", "width": 960}
+		]});
 
 			var name = '';
 
@@ -75,7 +84,7 @@ describe('Testing gulp-jimp-resize', function(){
 
 			test.on('end', function(){
 				//once the stream has ended
-				expect(name).to.equal("IMG_1743-custom.png");
+				expect(name).to.equal("IMG_1743-cool.jpg");
 				done();
 			});
 
@@ -88,14 +97,19 @@ describe('Testing gulp-jimp-resize', function(){
 
 	it('should return one image for each option', function(done){
 
-		var myTest = plugin(['sm', 'md', 'lg']);
+		var test = plugin({sizes: [
+			{"suffix": "rad"},
+			{"suffix": "test"},
+			{"suffix": "dude"}
+		]});
 
-		myTest.on('data', function(newImage){
+
+		test.on('data', function(newImage){
 			//make assertions
 			endImages.push(newImage);
 	
 		});
-		myTest.on('end', function(){
+		test.on('end', function(){
 			//once the stream has ended
 			var count = endImages.length;
 			expect(count).to.equal(3);
@@ -103,39 +117,19 @@ describe('Testing gulp-jimp-resize', function(){
 			done();
 		});
 
-		myTest.write(testImage);
+		test.write(testImage);
 	
-		myTest.end();
+		test.end();
 
 	});
 
 	describe("Error Messages:", function() {
 		it('should throw error with no options', function(done) {
-			expect(() => plugin()).to.throw('Missing options entry!');
-			done();
-		});
-		it('should error with no files passed', function(done) {
-			var test = plugin(['sm', 'md']);
-
-			expect(() => test.write('')).to.throw('No files passed!');
+			expect(() => plugin()).to.throw('Missing options!');
 			done();
 		});
 
-		it('should error on non-existent defaults', function(done) {
-
-			var test = plugin(['med']);
-
-			expect(() => test.write(testImage)).to.throw("Default option doesn't exist");
-			done();
 		
-		});
-
-		it('should error on missing metadata', function(done) {
-			var test = plugin([{"suffix": "-custom"}]);
-	
-			expect(() => test.write(testImage)).to.throw("Custom option missing metadata");
-			done();
-		})
 		
 	});
 

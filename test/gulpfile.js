@@ -3,7 +3,9 @@ var gulp = require('gulp');
 
 
 gulp.task('images', function() {
-	return gulp.src('./originals/**/*.*')
+	return gulp.src(
+		'./originals/**/*.*'
+		)
 	.pipe(jimp({
 		sizes: [
 			{"suffix": "md", "width": 960},
