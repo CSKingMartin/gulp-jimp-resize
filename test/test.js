@@ -125,7 +125,7 @@ describe('Testing gulp-jimp-resize', function(){
 
 	describe("Error Messages:", function() {
 		it('should throw error with no options', function(done) {
-			expect(() => plugin()).to.throw('Missing options!');
+			expect(() => plugin()).to.throw('Missing options entry!');
 			done();
 		});
 

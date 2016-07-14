@@ -40,10 +40,10 @@ function goGoGadgetImageResize (file, opt) {
 		var suffix = "-" + opt.suffix;
 	}
 	
-	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + ".png";
+	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + path.substring(path.lastIndexOf('.'));
 
 	if(!opt.width && !opt.height) { //no resizing to be done
-		return new gulp-util.File({
+		return new gutil.File({
 			path: name,
 			contents: file.contents
 		})
