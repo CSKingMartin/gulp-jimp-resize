@@ -5,9 +5,9 @@ var fs = require('fs');
 var gutil = require('gulp-util');
 var Jimp = require('jimp');
 
-var plugin = require('../index.js');
+var plugin = require('../index');
 
-var resizeyBit = require('../resize.js');
+var resizeyBit = require('../resize');
 
 describe('testing gulp-jimp-resize', function(){
 
