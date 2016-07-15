@@ -9,6 +9,10 @@ const PLUGIN_NAME = "gulp-jimp-resize";
 
 var newImages = [];
 
+function throwThatErrorOnTheGround(err) {
+	throw err;
+}
+
 function gulpJimpResize(options) {
 	if (!options) {
 		throw new PluginError(PLUGIN_NAME, 'Missing options!');
@@ -25,7 +29,7 @@ function gulpJimpResize(options) {
 				cb();
 			})
 			.catch(err => {
-				gutil.log("there was an error somewhere :(", err);
+				return throwThatErrorOnTheGround( new PluginError(PLUGIN_NAME, 'test'));
 			});
 	});
 }
