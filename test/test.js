@@ -7,7 +7,7 @@ var Jimp = require('jimp');
 
 var plugin = require('../');
 
-var resizeyBit = require(".././resize.js");
+var resizeyBit = require('../resize.js');
 
 describe('testing gulp-jimp-resize', function(){
 
