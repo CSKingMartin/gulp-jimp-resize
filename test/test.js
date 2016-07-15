@@ -50,14 +50,11 @@ describe('testing gulp-jimp-resize', function(){
 				{"suffix": "dude"}
 			]});
 
-
 			test.on('data', function(newImage){
-				//make assertions
 				endImages.push(newImage);
 			});
 
 			test.on('end', function(){
-				//once the stream has ended
 				var count = endImages.length;
 				expect(count).to.equal(3);
 
@@ -91,6 +88,11 @@ describe('testing gulp-jimp-resize', function(){
 			contents: fs.readFileSync( __dirname + '/originals/zed.png')
 		})
 
+		var testText= new gutil.File({
+			path: __dirname + '/originals/test.txt',
+			contents: fs.readFileSync( __dirname + '/originals/test.txt')
+		})
+
 		describe('should save with correct name', function() {
 			it('test one', function(done) {
 
@@ -118,7 +120,6 @@ describe('testing gulp-jimp-resize', function(){
 					.catch(err => console.log(err));
 
 				done();
-
 			});
 
 			it('test two', function(done) {
@@ -228,12 +229,14 @@ describe('testing gulp-jimp-resize', function(){
 			})
 		})	
 
-		// describe("Error Messages:", function() {
-		// 	it('should throw warning when embiggening images', function(done) {
-		// 		resizeyBit(testImage2, {"suffix": "tooBig", "width": 800});
-		// 		expect("warning");
-		// 		done();
-		// 	});
-		// });
+		describe("Error Messages:", function() {
+			it('should throw error with bad file types', function() {
+				
+				expect(
+					resizeyBit(testText, {"suffix": "notAnImage", "width": 800})
+					).to.throw("bad");
+			
+			});
+		});
 	})
 })
