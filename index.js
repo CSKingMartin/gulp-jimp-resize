@@ -91,7 +91,7 @@ function goGoGadgetImageResize (file, opt) {
 
 function gulpJimpResize(options) {
 	if (!options) {
-		throw new PluginError(PLUGIN_NAME, 'Missing options entry!');
+		throw new PluginError(PLUGIN_NAME, 'Missing options!');
 	}
 	return through.obj(function(file, enc, cb) { //transform function
 		if(!file){
