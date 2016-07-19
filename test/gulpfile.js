@@ -4,7 +4,7 @@ var gulp = require('gulp');
 
 gulp.task('images', function() {
 	return gulp.src(
-		'./originals/**/*.*'
+		'./originals/**/*.{png,jpg,bmp}'
 		)
 	.pipe(jimp({
 		sizes: [

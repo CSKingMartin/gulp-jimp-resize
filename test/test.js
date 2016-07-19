@@ -22,7 +22,6 @@ function read(contents, fn, done) {
 			done(e);
 			return;
 		}
-
 		done();
 	});
 }
