@@ -1,4 +1,5 @@
 var expect = require('chai').expect;
+var assert = require('chai').assert;
 var gulp = require('gulp');
 var File = require('vinyl');
 var fs = require('fs');
@@ -9,17 +10,44 @@ var plugin = require('../index');
 
 var resizeyBit = require('../resize');
 
+
+function read(contents, fn, done) {
+	Jimp.read(contents, function (err, image) {
+		if (err) {
+			done(err);
+		}
+		try {
+			fn(image);
+		} catch(e) {
+			done(e);
+			return;
+		}
+
+		done();
+	});
+}
+
+var testImage = new gutil.File({
+	path: __dirname + '/originals/trees.jpg',
+	contents: fs.readFileSync( __dirname + '/originals/trees.jpg')
+})
+
+var testImage2 = new gutil.File({
+	path: __dirname + '/originals/portrait.png',
+	contents: fs.readFileSync( __dirname + '/originals/portrait.png')
+})
+
+var testText= new gutil.File({
+	path: __dirname + '/originals/test.txt',
+	contents: fs.readFileSync( __dirname + '/originals/test.txt')
+})
+
+var testGif= new gutil.File({
+	path: __dirname + '/originals/haha.gif',
+	contents: fs.readFileSync( __dirname + '/originals/haha.gif')
+})
+
 describe('testing gulp-jimp-resize', function(){
-
-	var testImage = new gutil.File({
-			path: __dirname + './originals/IMG_1743.jpg',
-			contents: fs.readFileSync( __dirname + '/originals/IMG_1743.jpg')
-		});
-
-	var testImage2 = new gutil.File({
-		path: __dirname + './originals/zed.png',
-		contents: fs.readFileSync( __dirname + '/originals/zed.png')
-	})
 
 	var endImages = [];
 
@@ -77,21 +105,6 @@ describe('testing gulp-jimp-resize', function(){
 	describe('jimpy bits', function() { //deals with the 'jimp' bits (resize.js)
 
 		this.timeout(4000);
-
-		var testImage = new gutil.File({
-				path: __dirname + '/originals/IMG_1743.jpg',
-				contents: fs.readFileSync( __dirname + '/originals/IMG_1743.jpg')
-			});
-
-		var testImage2 = new gutil.File({
-			path: __dirname + '/originals/zed.png',
-			contents: fs.readFileSync( __dirname + '/originals/zed.png')
-		})
-
-		var testText= new gutil.File({
-			path: __dirname + '/originals/test.txt',
-			contents: fs.readFileSync( __dirname + '/originals/test.txt')
-		})
 
 		describe('should save with correct name', function() {
 			it('test one', function(done) {
@@ -153,8 +166,8 @@ describe('testing gulp-jimp-resize', function(){
 		describe('should have correct dimensions', function() {
 
 			var options = {sizes: [
-					{"suffix": "don't", "width": 200},
-					{"suffix": "be-a", "height": 200},
+					{"suffix": "don't", "width": 300},
+					{"suffix": "be-a", "height": 300},
 					{"suffix": "square", "width": 200, "height": 200}
 				]};
 
@@ -163,79 +176,66 @@ describe('testing gulp-jimp-resize', function(){
 				resizeyBit(testImage, options.sizes[0])
 				.then(function(res) {
 					//console.log(res);
-
-					var width;
-
-					Jimp.read(res.contents, function (err, image) {
-						if (err) {
-							reject(err);
-							return;
-						}
-
-						width = image.bitmap.width;
-
-					})
-					expect(width).to.equal(200);
-					done();
+					read(res.contents, function(image) {
+						expect(image.bitmap.width).to.equal(300);
+					}, done);
+	
 				})
+				.catch(err => console.log(err))
 			})
 
 			it('test two - height', function(done) {
 
+
 				resizeyBit(testImage, options.sizes[1])
 				.then(function(res) {
 					//console.log(res);
-
-					var height;
-
-					Jimp.read(res.contents, function (err, image) {
-						if (err) {
-							reject(err);
-							return;
-						}
-
-						height = image.bitmap.height;
-
-					})
-					expect(height).to.equal(200);
-					done();
+					read(res.contents, function(image) {
+						expect(image.bitmap.height).to.equal(300);
+					}, done);
+	
 				})
+				.catch(err => console.log(err))
+
 			})
 
 			it('test three - width+height', function(done) {
 
 				resizeyBit(testImage, options.sizes[2])
-				.then(function(res) {
-					//console.log(res);
-
-					var height;
-					var width;
-
-					Jimp.read(res.contents, function (err, image) {
-						if (err) {
-							reject(err);
-							return;
-						}
-
-						width = image.bitmap.width;
-
-						height = image.bitmap.height;
+					.then(function(res) {
+						read(res.contents, function(image) {
+							expect(image.bitmap.width).to.equal(200);
+							expect(image.bitmap.height).to.equal(200);
+						}, done);
 
 					})
-					expect(height).to.equal(200);
-					expect(width).to.equal(200);
-					done();
-				})		
+					.catch(err => console.log(err))
 			})
+
 		})	
 
 		describe("Error Messages:", function() {
-			it('should throw error with bad file types', function() {
-				
-				expect(
-					resizeyBit(testText, {"suffix": "notAnImage", "width": 800})
-					).to.throw("bad");
-			
+			it('Bad file type with .txt', function(done) {
+
+				resizeyBit(testText, {"suffix": "notAnImage", "width": 800})
+				.then(function(res) {
+					var err = "No error thrown!";
+					done(err);
+				}, function(rej) {
+					console.log("\tThrows an Error-", rej.message);
+					done();
+				})
+			});
+			it('Bad file type with .gif', function(done) {
+
+				resizeyBit(testGif, {"suffix": "notAnImage", "width": 800})
+				.then(function(res) {
+					var err = "No error thrown!";
+					done(err);
+				}, function(rej) {
+					console.log("\tThrows an Error-", rej.message);
+					done();
+				})
 			});
 		});
 	})
