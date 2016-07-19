@@ -17,17 +17,17 @@ var jimp = require("gulp-jimp-resize");
 var gulp = require('gulp');
 
 gulp.task('images', function() {
-	return gulp.src('./originals/**/*.*')
+	return gulp.src(
+		'./originals/**/*.{png,jpg,bmp}'
+		)
 	.pipe(jimp({
 		sizes: [
 			{"suffix": "md", "width": 960},
-			{"suffix": "sm", "height": 480},
-			{"width": 800, "height": 720},
-			{"suffix": "original"}
+			{"suffix": "sm", "width": 480}
 		]
 	}))
 	.pipe(gulp.dest('./resized/'));
-});	
+});
 		
 ```
 

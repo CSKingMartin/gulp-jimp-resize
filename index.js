@@ -20,8 +20,6 @@ function gulpJimpResize(options) {
 			return cb(null, file);
 		}
 
-		var error;
-
 		Promise.all(options.sizes.map(opt => resize(file, opt)))
 			.then(imageArray => {
 				imageArray.forEach(image => this.push(image)) 
