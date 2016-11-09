@@ -22,10 +22,10 @@
   "author": "Conner Wells https://github.com/CSKingMartin",
   "license": "MIT",
   "dependencies": {
-    "jimp": "^0.2.24"
+    "jimp": "^0.2.24",
+    "bluebird": "^3.4.1"
   },
   "devDependencies": {
-    "bluebird": "^3.4.1",
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-util": "^3.0.7",
