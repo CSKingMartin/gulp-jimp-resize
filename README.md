@@ -22,7 +22,7 @@ gulp.task('images', function() {
 		)
 	.pipe(jimp({
 		sizes: [
-			{"suffix": "md", "width": 960},
+			{"suffix": "md", "width": 960, "upscale": false},
 			{"suffix": "sm", "width": 480}
 		]
 	}))
@@ -32,7 +32,7 @@ gulp.task('images', function() {
 ```
 
 #options:
-gulp-jimp-resize takes an Object 'sizes'. Each element inside 'sizes' is produced from each image passed to the plugin. Each option has 3 optional attributes. Suffix denotes the added string to the name of the new image. Width and height are self explainitory. If only one of width or height is passed through, the plugin will keep the apsect ratio of the original image. These attributes are also optional (i.e, you can give a suffix only and rename the image).
+gulp-jimp-resize takes an Object 'sizes'. Each element inside 'sizes' is produced from each image passed to the plugin. Each option has 3 optional attributes. Suffix denotes the added string to the name of the new image. Width and height are self explainitory. If only one of width or height is passed through, the plugin will keep the apsect ratio of the original image. These attributes are also optional (i.e, you can give a suffix only and rename the image). If the optional parameter 'upscale' is set to false, smaller images will not be resized but copied.
 
 #Licence
 MIT
