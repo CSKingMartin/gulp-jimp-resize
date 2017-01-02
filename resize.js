@@ -12,7 +12,8 @@ function goGoGadgetImageResize (file, opt) {
 
 	if(opt.suffix) { var suffix = "-" + opt.suffix; }
 	
-	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + path.substring(path.lastIndexOf('.'));
+	var extension = path.substring(path.lastIndexOf('.'));
+	var name = path.substring(path.lastIndexOf('\\')+1, path.lastIndexOf('.')) + suffix + extension;
 
 	if(!opt.width && !opt.height) { //no resizing to be done
 		return new gutil.File({
@@ -41,7 +42,22 @@ function goGoGadgetImageResize (file, opt) {
 			
 			image.resize(width, height).quality(100);
         	
-	       	var newImg = image.getBuffer(Jimp.MIME_JPEG, function(err, buffer){
+			var mime;
+			switch(extension.toLowerCase()){
+				case ".jpg":
+				case ".jpeg":
+				case ".jpe":
+					mime = Jimp.MIME_JPEG;
+					break;
+				case ".png":
+					mime = Jimp.MIME_PNG;
+					break;
+				case ".bmp":
+				case ".dib":
+					mime = Jimp.MIME_BMP;
+					break;
+			}
+	       	var newImg = image.getBuffer(mime, function(err, buffer){
 				if (err) {
 					reject(err);
 					return;
