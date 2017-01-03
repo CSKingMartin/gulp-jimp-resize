@@ -36,3 +36,6 @@ gulp-jimp-resize takes an Object 'sizes'. Each element inside 'sizes' is produce
 
 #Licence
 MIT
+
+#Note:
+@mpolitze added some wonderful additions to the project. My tests on Codeship are currently failing. About to take a month long trip to New Zealand and will be unable to address these until Feb. 
