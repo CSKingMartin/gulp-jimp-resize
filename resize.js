@@ -32,8 +32,16 @@ function goGoGadgetImageResize (file, opt) {
 			var width = Jimp.AUTO; var height = Jimp.AUTO;
 
 			if((opt.width && opt.width > image.bitmap.width) || 
-				(opt.height && opt.height > image.bitmap.height)) {
-				gutil.log(PLUGIN_NAME, 'You are resizing an image to a larger size than the original');
+			   (opt.height && opt.height > image.bitmap.height)) {
+				if(opt.upscale === false){
+					resolve(new gutil.File({
+						path: name,
+						contents: file.contents
+					}));
+					return;
+				}else{
+					gutil.log(PLUGIN_NAME, 'You are resizing an image to a larger size than the original');
+				}
 			}
 
 			if(opt.width) { width = opt.width; }
