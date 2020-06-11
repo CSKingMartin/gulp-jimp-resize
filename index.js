@@ -1,8 +1,7 @@
 var Jimp = require("jimp");
 var through = require('through2');
-var gutil = require('gulp-util');
 var File = require('vinyl');
-var PluginError = gutil.PluginError;
+var PluginError = require('plugin-error');
 var resize = require('./resize.js');
 var Promise = require('bluebird');
 
