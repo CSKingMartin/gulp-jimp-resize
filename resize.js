@@ -1,14 +1,14 @@
 var Jimp = require("jimp");
-var gutil = require('gulp-util');
 var File = require('vinyl');
+var log = require('fancy-log');
 
 const PLUGIN_NAME = "gulp-jimp-resize";
 
 function goGoGadgetImageResize (file, opt) {
 	
 	var path = file.path;
-	var base = "";
-	var cwd = "";
+	var base;
+	var cwd;
 	
 	var suffix = "";
 	
@@ -23,7 +23,7 @@ function goGoGadgetImageResize (file, opt) {
 	}
 	
 	if(!opt.width && !opt.height) { //no resizing to be done
-		return new gutil.File({
+		return new File({
 			path: name,
 			base: base,
 			contents: file.contents
@@ -42,14 +42,14 @@ function goGoGadgetImageResize (file, opt) {
 			if((opt.width && opt.width > image.bitmap.width) || 
 			(opt.height && opt.height > image.bitmap.height)) {
 				if(opt.upscale === false){
-					resolve(new gutil.File({
+					resolve(new File({
 						path: name,
 						base: base,
 						contents: file.contents
 					}));
 					return;
 				}else{
-					gutil.log(PLUGIN_NAME, 'You are resizing an image to a larger size than the original');
+					log(PLUGIN_NAME, 'You are resizing an image to a larger size than the original');
 				}
 			}
 			
@@ -94,7 +94,7 @@ function goGoGadgetImageResize (file, opt) {
 					return;
 				}
 				
-				resolve(new gutil.File({
+				resolve(new File({
 					path: name,
 					base: base,
 					contents:buffer

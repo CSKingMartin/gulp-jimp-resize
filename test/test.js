@@ -1,9 +1,6 @@
 var expect = require('chai').expect;
-var assert = require('chai').assert;
-var gulp = require('gulp');
 var File = require('vinyl');
 var fs = require('fs');
-var gutil = require('gulp-util');
 var Jimp = require('jimp');
 
 var plugin = require('../index');
@@ -38,24 +35,24 @@ function readImage(contents){
 	});
 }
 
-var testImage = new gutil.File({
+var testImage = new File({
 	path: __dirname + '/originals/trees.jpg',
 	contents: fs.readFileSync( __dirname + '/originals/trees.jpg'),
 	mime: "image/jpg"
 })
 
-var testImage2 = new gutil.File({
+var testImage2 = new File({
 	path: __dirname + '/originals/portrait.png',
 	contents: fs.readFileSync( __dirname + '/originals/portrait.png'),
 	mime: "image/png"
 })
 
-var testText= new gutil.File({
+var testText= new File({
 	path: __dirname + '/originals/test.txt',
 	contents: fs.readFileSync( __dirname + '/originals/test.txt')
 })
 
-var testGif= new gutil.File({
+var testGif= new File({
 	path: __dirname + '/originals/haha.gif',
 	contents: fs.readFileSync( __dirname + '/originals/haha.gif')
 })
